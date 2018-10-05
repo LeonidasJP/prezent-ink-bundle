@@ -57,8 +57,12 @@ class TwigFactory
         $message = new \Swift_Message();
         $message
             ->setSubject($template->renderBlock('subject', $parameters))
-            ->setBody($this->renderTextPart($template, $parameters), 'text/plain')
-            ->addPart($this->renderHtmlPart($template, $parameters), 'text/html');
+            ->setBody($this->renderTextPart($template, $parameters), 'text/plain');
+
+        if(defined('LIBXML_HTML_NODEFDTD') && defined('LIBXML_HTML_NOIMPLIED')) {
+            $message
+                ->addPart($this->renderHtmlPart($template, $parameters), 'text/html');
+        }
 
         return $message;
     }
